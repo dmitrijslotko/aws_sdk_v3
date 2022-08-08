@@ -1,26 +1,26 @@
 {
-  "_from": "aws_nodejs_sdk_v3@0.0.3",
-  "_id": "aws_nodejs_sdk_v3@0.0.3",
+  "_from": "aws_nodejs_sdk_v3@0.0.4",
+  "_id": "aws_nodejs_sdk_v3@0.0.4",
   "_inBundle": false,
-  "_integrity": "sha512-SduV1wvdXx9+baPbu1anJ5T3tTTUE1dBk+nFlW7n5RoGUPA9pfMIa6VnzSC4qcmxr+6mWUHZ2fqfJV3nNGE/Vw==",
+  "_integrity": "sha512-P3PH3jjnCcdKl8fuoyxt26bJSA3FZRt8lFpalsiY4k7louj7hCxfzyOCeLeEdA3HOwzgnzj7PQiIH1wDfnJu9Q==",
   "_location": "/aws_nodejs_sdk_v3",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "aws_nodejs_sdk_v3@0.0.3",
+    "raw": "aws_nodejs_sdk_v3@0.0.4",
     "name": "aws_nodejs_sdk_v3",
     "escapedName": "aws_nodejs_sdk_v3",
-    "rawSpec": "0.0.3",
+    "rawSpec": "0.0.4",
     "saveSpec": null,
-    "fetchSpec": "0.0.3"
+    "fetchSpec": "0.0.4"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/aws_nodejs_sdk_v3/-/aws_nodejs_sdk_v3-0.0.3.tgz",
-  "_shasum": "c798e32119dde19dd239cdf9d5fd78f8fe386061",
-  "_spec": "aws_nodejs_sdk_v3@0.0.3",
+  "_resolved": "https://registry.npmjs.org/aws_nodejs_sdk_v3/-/aws_nodejs_sdk_v3-0.0.4.tgz",
+  "_shasum": "ad55c9c86b9d4d518957783c01a42bc927f5ac49",
+  "_spec": "aws_nodejs_sdk_v3@0.0.4",
   "_where": "/Users/dmitrijslotko/Documents/Work/Projects/test_playground",
   "author": {
     "name": "Dmitrijs Lotko",
@@ -32,6 +32,8 @@
   "bundleDependencies": false,
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.142.0",
+    "@aws-sdk/client-firehose": "^3.142.0",
+    "@aws-sdk/client-kinesis": "^3.142.0",
     "@aws-sdk/lib-dynamodb": "^3.142.0"
   },
   "deprecated": false,
@@ -53,5 +55,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.0.4"
+  "version": "0.0.6"
 }

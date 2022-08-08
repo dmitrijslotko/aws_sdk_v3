@@ -1,10 +1,11 @@
-const {sleep} = require("./sleep.js")
-async function exponential_backoff(func_promise,retry_count = 5, wait_time_ms = 100, wait_time_multiplier = 1.2) {
+const { sleep } = require("./sleep.js")
+
+async function exponential_backoff(client, command, params, retry_count = 5, wait_time_ms = 100, wait_time_multiplier = 1.2) {
     let try_number = 1
     let err
     do {
         try {
-            const response = await func_promise
+            const response = await client.send(new command(params))
             return response
         } catch (error) {
             err = error
@@ -16,6 +17,7 @@ async function exponential_backoff(func_promise,retry_count = 5, wait_time_ms = 
     } while (try_number <= retry_count);
     console.error(`All ${retry_count} retries have failed.`);
     throw err;
+
 }
 
 exports.exponential_backoff = exponential_backoff
