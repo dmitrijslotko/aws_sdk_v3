@@ -7,6 +7,7 @@ const {sqs_client} = require("./sqs/sqs.js");
 const {secret_manager} = require("./secret_manager/secret_manager.js");
 
 const {sleep} = require("./utils/sleep.js");
+const {dynamodb_helpers} = require("./dynamo_db/helpers.js");
 
 exports.secret_manager = secret_manager;
 exports.sqs_client = sqs_client;
@@ -16,3 +17,4 @@ exports.firehose_client = firehose_client;
 exports.kinesis_client = kinesis_client;
 exports.dynamodb_document_client = dynamodb_document_client;
 exports.sleep = sleep;
+exports.dynamodb_helpers = dynamodb_helpers;
