@@ -3,42 +3,30 @@ const {
   GetSecretValueCommand,
   RotateSecretCommand,
 } = require("@aws-sdk/client-secrets-manager");
-const client = new SecretsManagerClient();
 const exponential_backoff = require("../utils/exponential_backoff.js");
 
-get_secret_value = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    client,
-    GetSecretValueCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
+const BaseClient = require("../base_clases/base_client.js");
 
-rotate_secret = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    client,
-    RotateSecretCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
+class SecretsManager extends BaseClient {
+  constructor(params) {
+    super();
+    this.client = new SecretsManagerClient(params);
+  }
 
-exports.secret_manager = {
-  get_secret_value,
-  rotate_secret,
+  static send = async (command, params) => {
+    return exponential_backoff.exponential_backoff(
+      new SecretsManagerClient(),
+      command,
+      params,
+      this.retry_count,
+      this.wait_time_ms,
+      this.wait_time_multiplier
+    );
+  };
+}
+
+module.exports = {
+  SecretsManager,
+  GetSecretValueCommand,
+  RotateSecretCommand,
 };

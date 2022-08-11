@@ -13,6 +13,7 @@ const exponential_backoff = require("../utils/exponential_backoff.js");
 
 copy_object = async (
   params,
+
   retry_count = 5,
   wait_time_ms = 100,
   wait_time_multiplier = 1.2
