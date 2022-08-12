@@ -1,9 +1,3 @@
-// 	link to the dynamo db v3 documentation
-//  https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_lib_dynamodb.html
-
-// link to aws cli
-// https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#constructor-property
-
 const {
   QueryCommand,
   UpdateCommand,
@@ -16,194 +10,73 @@ const {
   TransactGetCommand,
   TransactWriteCommand,
 } = require("@aws-sdk/lib-dynamodb");
-const exponential_backoff = require("../utils/exponential_backoff.js");
-const {DynamoDBDocumentClient} = require("@aws-sdk/lib-dynamodb");
+const {DynamoDBDocumentClient: client} = require("@aws-sdk/lib-dynamodb");
 const {DynamoDBClient} = require("@aws-sdk/client-dynamodb");
-const ddb_client = new DynamoDBClient();
 
+const exponential_backoff = require("../utils/exponential_backoff.js");
+const BaseClient = require("../base_clases/base_client.js");
 const marshallOptions = {
   convertEmptyValues: false,
   removeUndefinedValues: false,
   convertClassInstanceToMap: false,
 };
-
 const unmarshallOptions = {
   wrapNumbers: false,
 };
-
 const translateConfig = {marshallOptions, unmarshallOptions};
+class DynamoDBDocumentClient extends BaseClient {
+  constructor(params) {
+    super();
+    this.client = client.from(new DynamoDBClient(params), translateConfig);
+  }
 
-const ddb_doc_client = DynamoDBDocumentClient.from(ddb_client, translateConfig);
+  static send = async (command, params) => {
+    return exponential_backoff.exponential_backoff(
+      client.from(new DynamoDBClient(params), translateConfig),
+      command,
+      params,
+      this.retry_count,
+      this.wait_time_ms,
+      this.wait_time_multiplier
+    );
+  };
 
-transact_get = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    ddb_doc_client,
-    TransactGetCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
+  static get_expression_attribute_names = (attributes) => {
+    let attribute_list = {};
+    for (const attribute of attributes) {
+      attribute_list[`#${attribute}`] = attribute;
+    }
+    return attribute_list;
+  };
 
-transact_write = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    ddb_doc_client,
-    TransactWriteCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
+  static get_update_expression = (attributes) => {
+    let str = "set ";
+    for (const attribute of attributes) {
+      str += `#${attribute} = :${attribute},`;
+    }
+    str = str.substring(0, str.length - 1);
+    return str;
+  };
 
-scan = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    ddb_doc_client,
-    ScanCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
+  static get_expression_attribute_values = (obj, attributes) => {
+    let attribute_list = {};
+    for (const attribute of attributes) {
+      attribute_list[`:${attribute}`] = obj[attribute];
+    }
+    return attribute_list;
+  };
+}
 
-query = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    ddb_doc_client,
-    QueryCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
-
-update = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    ddb_doc_client,
-    UpdateCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
-
-get = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    ddb_doc_client,
-    GetCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
-
-put = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    ddb_doc_client,
-    PutCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
-
-remove = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    ddb_doc_client,
-    DeleteCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
-
-batch_get = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    ddb_doc_client,
-    BatchGetCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
-
-batch_write = async (
-  params,
-  retry_count = 5,
-  wait_time_ms = 100,
-  wait_time_multiplier = 1.2
-) => {
-  return exponential_backoff.exponential_backoff(
-    ddb_doc_client,
-    BatchWriteCommand,
-    params,
-    retry_count,
-    wait_time_ms,
-    wait_time_multiplier
-  );
-};
-
-exports.dynamodb_document_client = {
-  scan,
-  query,
-  update,
-  get,
-  put,
-  remove,
-  batch_get,
-  batch_write,
-  transact_get,
-  transact_write,
+module.exports = {
+  DynamoDBDocumentClient,
+  QueryCommand,
+  UpdateCommand,
+  GetCommand,
+  PutCommand,
+  DeleteCommand,
+  BatchGetCommand,
+  BatchWriteCommand,
+  ScanCommand,
+  TransactGetCommand,
+  TransactWriteCommand,
 };
