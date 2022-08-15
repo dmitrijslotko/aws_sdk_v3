@@ -25,46 +25,62 @@ const unmarshallOptions = {
 };
 const translateConfig = {marshallOptions, unmarshallOptions};
 class DynamoDBDocumentClient extends BaseClient {
+  db_client = null;
   constructor(params) {
     super();
-    this.client = client.from(new DynamoDBClient(params), translateConfig);
+    this.db_client = new DynamoDBClient(params);
+    this.client = client.from(db_client, translateConfig);
   }
 
-  static send = async (command, params) => {
-    return exponential_backoff.exponential_backoff(
-      client.from(new DynamoDBClient(params), translateConfig),
+  static async send(command, params) {
+    const temp_db_client = new DynamoDBClient();
+    const temp_client = client.from(temp_db_client, translateConfig);
+    const response = exponential_backoff.exponential_backoff(
+      temp_client,
       command,
       params,
       this.retry_count,
       this.wait_time_ms,
       this.wait_time_multiplier
     );
-  };
+    temp_db_client.destroy();
+    temp_client.destroy();
+    return response;
+  }
 
-  static get_expression_attribute_names = (attributes) => {
+  async close_open_connection() {
+    try {
+      super.close_open_connection();
+      this.db_client.destroy();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  static get_expression_attribute_names(attributes) {
     let attribute_list = {};
     for (const attribute of attributes) {
       attribute_list[`#${attribute}`] = attribute;
     }
     return attribute_list;
-  };
+  }
 
-  static get_update_expression = (attributes) => {
+  static get_update_expression(attributes) {
     let str = "set ";
     for (const attribute of attributes) {
       str += `#${attribute} = :${attribute},`;
     }
     str = str.substring(0, str.length - 1);
     return str;
-  };
+  }
 
-  static get_expression_attribute_values = (obj, attributes) => {
+  static get_expression_attribute_values(obj, attributes) {
     let attribute_list = {};
     for (const attribute of attributes) {
       attribute_list[`:${attribute}`] = obj[attribute];
     }
     return attribute_list;
-  };
+  }
 }
 
 module.exports = {

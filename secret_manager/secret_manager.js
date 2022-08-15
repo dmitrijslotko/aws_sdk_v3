@@ -13,16 +13,9 @@ class SecretsManagerClient extends BaseClient {
     this.client = new client(params);
   }
 
-  static send = async (command, params) => {
-    return exponential_backoff.exponential_backoff(
-      new client(),
-      command,
-      params,
-      this.retry_count,
-      this.wait_time_ms,
-      this.wait_time_multiplier
-    );
-  };
+  static async send(command, params) {
+    return super.send(client, command, params);
+  }
 }
 
 module.exports = {

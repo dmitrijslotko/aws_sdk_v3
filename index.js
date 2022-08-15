@@ -163,9 +163,6 @@ exports.TransactGetCommand = TransactGetCommand;
 
 //#endregion DynamoDB
 
-exports.s3_client = s3_client;
-exports.firehose_client = firehose_client;
-
 //#region Utils
 const {sleep} = require("./utils/sleep.js");
 exports.sleep = sleep;
