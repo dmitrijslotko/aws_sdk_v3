@@ -8,7 +8,6 @@ const {
   SendMessageCommand,
 } = require("@aws-sdk/client-sqs");
 
-const exponential_backoff = require("../utils/exponential_backoff.js");
 const BaseClient = require("../base_clases/base_client.js");
 
 class SQSClient extends BaseClient {

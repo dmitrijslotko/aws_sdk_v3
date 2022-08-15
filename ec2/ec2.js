@@ -1,12 +1,13 @@
 const {
-  SecretsManagerClient: client,
-  GetSecretValueCommand,
-  RotateSecretCommand,
-} = require("@aws-sdk/client-secrets-manager");
+  EC2Client: client,
+  DescribeInstancesCommand,
+  StopInstancesCommand,
+  StartInstancesCommand,
+} = require("@aws-sdk/client-ec2");
 
 const BaseClient = require("../base_clases/base_client.js");
 
-class SecretsManagerClient extends BaseClient {
+class EC2Client extends BaseClient {
   constructor(params) {
     super();
     this.client = new client(params);
@@ -18,7 +19,8 @@ class SecretsManagerClient extends BaseClient {
 }
 
 module.exports = {
-  SecretsManagerClient,
-  GetSecretValueCommand,
-  RotateSecretCommand,
+  EC2Client,
+  DescribeInstancesCommand,
+  StopInstancesCommand,
+  StartInstancesCommand,
 };

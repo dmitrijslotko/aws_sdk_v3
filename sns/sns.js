@@ -4,7 +4,6 @@ const {
   PublishCommand,
 } = require("@aws-sdk/client-sns");
 
-const exponential_backoff = require("../utils/exponential_backoff.js");
 const BaseClient = require("../base_clases/base_client.js");
 
 class SNSClient extends BaseClient {

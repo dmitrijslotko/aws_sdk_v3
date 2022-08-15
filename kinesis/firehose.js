@@ -5,7 +5,6 @@ const {
   PutRecordBatchCommand,
   PutRecordCommand,
 } = require("@aws-sdk/client-firehose");
-const exponential_backoff = require("../utils/exponential_backoff.js");
 const BaseClient = require("../base_clases/base_client.js");
 
 class FirehoseClient extends BaseClient {

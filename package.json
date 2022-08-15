@@ -38,6 +38,12 @@
     "@aws-sdk/client-secrets-manager": "^3.142.0",
     "@aws-sdk/client-sns": "^3.142.0",
     "@aws-sdk/client-sqs": "^3.142.0",
+    "@aws-sdk/client-athena": "^3.142.0",
+    "@aws-sdk/client-lambda": "^3.142.0",
+    "@aws-sdk/client-ec2": "^3.142.0",
+    "@aws-sdk/client-rds-data": "^3.142.0",
+    "@aws-sdk/client-redshift-data": "^3.142.0",
+    "@aws-sdk/client-sfn": "^3.142.0",
     "@aws-sdk/lib-dynamodb": "^3.142.0"
   },
   "deprecated": false,
@@ -59,5 +65,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.0.24"
+  "version": "0.0.25"
 }

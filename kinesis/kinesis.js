@@ -16,7 +16,6 @@ const {
   SubscribeToShardCommand,
   UpdateShardCountCommand,
 } = require("@aws-sdk/client-kinesis");
-const exponential_backoff = require("../utils/exponential_backoff.js");
 const BaseClient = require("../base_clases/base_client.js");
 
 class KinesisClient extends BaseClient {
